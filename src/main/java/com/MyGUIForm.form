@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.MyGUIForm">
+  <grid id="27dc6" binding="app" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="18" y="17" width="807" height="539"/>
+    </constraints>
+    <properties>
+      <autoscrolls value="true"/>
+      <enabled value="true"/>
+      <inheritsPopupMenu value="false"/>
+      <maximumSize width="792" height="764"/>
+      <minimumSize width="792" height="264"/>
+      <opaque value="true"/>
+      <preferredSize width="792" height="764"/>
+      <visible value="true"/>
+    </properties>
+    <border type="etched">
+      <font/>
+      <title-color color="-4473925"/>
+    </border>
+    <children>
+      <grid id="56ba2" binding="trees" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="5" bottom="5" right="0"/>
+        <constraints border-constraint="West"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="38cfe" class="javax.swing.JTree" binding="filesTree">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="2" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <enabled value="false"/>
+              <expandsSelectedPaths value="true"/>
+              <foreground color="-458764"/>
+            </properties>
+          </component>
+          <component id="2ca98" class="javax.swing.JLabel" binding="fileType">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="File type"/>
+            </properties>
+          </component>
+          <component id="a4466" class="javax.swing.JTextField" binding="logTextField" default-binding="true">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="60" height="30"/>
+              </grid>
+            </constraints>
+            <properties>
+              <text value=".log"/>
+            </properties>
+          </component>
+          <component id="d5518" class="javax.swing.JTextField" binding="textToSearchField">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="300" height="30"/>
+              </grid>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="16cef" class="javax.swing.JLabel" binding="textToSearch">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="100" height="20"/>
+              </grid>
+            </constraints>
+            <properties>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <text value="Text to search"/>
+              <verticalTextPosition value="0"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="28b13" binding="docs" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="4" left="5" bottom="5" right="5"/>
+        <constraints border-constraint="East"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <tabbedpane id="8e3c0" binding="tabbedPane1" default-binding="true">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="2" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="e2456" binding="tabs" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <tabbedpane title="Untitled"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="a03ee" class="javax.swing.JScrollBar" binding="scrollBar1" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="0" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <hspacer id="f67f8">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </hspacer>
+                </children>
+              </grid>
+            </children>
+          </tabbedpane>
+          <component id="c5545" class="javax.swing.JLabel" binding="dirNameFieldLabel">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="File"/>
+            </properties>
+          </component>
+          <component id="850e0" class="javax.swing.JButton" binding="directoryButton">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="109" height="29"/>
+              </grid>
+            </constraints>
+            <properties>
+              <alignmentX value="0.5"/>
+              <label value="choose dir"/>
+              <text value="choose dir"/>
+            </properties>
+          </component>
+          <component id="11044" class="javax.swing.JLabel" binding="directory">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="109" height="15"/>
+              </grid>
+            </constraints>
+            <properties>
+              <alignmentY value="0.5"/>
+              <autoscrolls value="false"/>
+              <text value="Directory to search"/>
+              <verticalAlignment value="0"/>
+            </properties>
+          </component>
+          <component id="9aa5b" class="javax.swing.JTextField" binding="dirNameField">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="270" height="30"/>
+              </grid>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="9aef8" class="javax.swing.JButton" binding="searchButton">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Search"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>
