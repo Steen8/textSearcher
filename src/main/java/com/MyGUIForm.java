@@ -2,8 +2,6 @@ package com;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +23,11 @@ public class MyGUIForm extends JFrame{
     private JTree filesTree;
 
     private String dirNameStr;
-    private List<File> files;
+    private List<File> filesWithGivenFormat;
+    private List<File> filesWithGivenText;
 
     public MyGUIForm() throws HeadlessException {
-        super("Text");
+        filesTree.setModel(null);
 
         /* creating FileChooser window to choose
         *  what directory to search file in */
@@ -46,16 +45,19 @@ public class MyGUIForm extends JFrame{
 
         searchButton.addActionListener(e -> {
             Searcher searcher = Searcher.getInstance();
-            if(files != null) {
-                files.clear();
+            if(filesWithGivenFormat != null) {
+                filesWithGivenFormat.clear();
             }
-            files = new ArrayList<>();
-            Searcher.searchFilesWithGivenFormat(dirNameStr, formatTextField.getText(), files);
-            searcher.searchFilesWithGivenText(files, textToSearchField.getText());
+            filesWithGivenFormat = new ArrayList<>();
+            Searcher.searchFilesWithGivenFormat(dirNameStr, formatTextField.getText(), filesWithGivenFormat);
 
+            filesWithGivenText = searcher.searchFilesWithGivenText(filesWithGivenFormat, textToSearchField.getText());
+
+            PathsTree pathsTree = new PathsTree(dirNameStr);
+            pathsTree.showTree(filesTree, filesWithGivenText, dirNameStr);
         });
 
-        filesTree.setModel(null);
+
     }
 
     public static void main(String[] args) {

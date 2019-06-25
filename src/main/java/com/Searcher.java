@@ -32,7 +32,7 @@ public class Searcher {
                     searchFilesWithGivenFormat(currentDir, textFormat, foundFiles);
                 }
                 if(checkFormat(curFile.getName(), textFormat)) {
-                    System.out.println(curFile);
+                    //System.out.println(curFile);
                     foundFiles.add(curFile);
                 }
             }
@@ -52,7 +52,8 @@ public class Searcher {
         return extension.equals(format);
     }
 
-    public void searchFilesWithGivenText(List<File> files, String textToSearch) {
+    public List<File> searchFilesWithGivenText(List<File> files, String textToSearch) {
+        List<File> foundFilesWithGivenText = new ArrayList<>();
         for (File f : files) {
             try {
                 FileReader fileIn = new FileReader(f);
@@ -60,7 +61,7 @@ public class Searcher {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     if ((line.contains(textToSearch))) {
-                        System.out.println("file " + f.getName() + " contains " + textToSearch);
+                        foundFilesWithGivenText.add(f);
                         break;
                     }
                 }
@@ -68,6 +69,7 @@ public class Searcher {
                 System.out.println(e);
             }
         }
+        return foundFilesWithGivenText;
     }
 
 
