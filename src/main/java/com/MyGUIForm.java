@@ -44,6 +44,7 @@ public class MyGUIForm extends JFrame{
 
 
         searchButton.addActionListener(e -> {
+            filesTree.setModel(null);
             Searcher searcher = Searcher.getInstance();
             if(filesWithGivenFormat != null) {
                 filesWithGivenFormat.clear();
