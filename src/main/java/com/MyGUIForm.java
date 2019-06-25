@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyGUIForm extends JFrame{
     private JPanel app;
@@ -11,19 +14,18 @@ public class MyGUIForm extends JFrame{
     private JPanel docs;
     private JLabel textToSearch;
     private JTextField textToSearchField;
-    private JTree filesTree;
     private JLabel fileType;
-    private JTextField logTextField;
+    private JTextField formatTextField;
     private JTabbedPane tabbedPane1;
-    private JScrollBar scrollBar1;
     private JButton directoryButton;
     private JLabel directory;
-    private JPanel tabs;
     private JLabel dirNameFieldLabel;
     private JTextField dirNameField;
     private JButton searchButton;
+    private JTree filesTree;
 
     private String dirNameStr;
+    private List<File> files;
 
     public MyGUIForm() throws HeadlessException {
         super("Text");
@@ -36,15 +38,24 @@ public class MyGUIForm extends JFrame{
             jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // set fileChooser to be able to select only directories
             int response = jFileChooser.showOpenDialog(null);
             if(response == JFileChooser.APPROVE_OPTION) {                     // if user didn't close the dir selection without approving selected directory
-                dirNameStr = jFileChooser.getSelectedFile().toString();
+                dirNameStr = jFileChooser.getSelectedFile().getAbsolutePath();
                 dirNameField.setText(dirNameStr);
             }
         });
 
 
         searchButton.addActionListener(e -> {
+            Searcher searcher = Searcher.getInstance();
+            if(files != null) {
+                files.clear();
+            }
+            files = new ArrayList<>();
+            Searcher.searchFilesWithGivenFormat(dirNameStr, formatTextField.getText(), files);
+            searcher.searchFilesWithGivenText(files, textToSearchField.getText());
 
         });
+
+        filesTree.setModel(null);
     }
 
     public static void main(String[] args) {
