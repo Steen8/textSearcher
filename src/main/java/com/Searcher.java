@@ -32,7 +32,6 @@ public class Searcher {
                     searchFilesWithGivenFormat(currentDir, textFormat, foundFiles);
                 }
                 if(checkFormat(curFile.getName(), textFormat)) {
-                    //System.out.println(curFile);
                     foundFiles.add(curFile);
                 }
             }

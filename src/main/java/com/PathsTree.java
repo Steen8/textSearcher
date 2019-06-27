@@ -30,7 +30,6 @@ class PathsTree {
                 do {
                     DefaultMutableTreeNode childStr = (DefaultMutableTreeNode) children.nextElement();
                     nodeIndex++;
-                    System.out.println(childStr.getUserObject() + " this is object");
                     if (childStr.getUserObject().toString().equals(str)) {
                         doesTreeAlreadyContainThisStr = true;
                         break;
@@ -57,11 +56,8 @@ class PathsTree {
                 pathNamesFromRootDir.add(nameFromRootDir);
             }
 
-            //DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootDirNamePath.substring(rootDirNamePath.lastIndexOf('\\') + 1)); // + 1 to substring with '\' symbol
-
             PathsTree pathsTree = new PathsTree(rootDirNamePath);
             for (String currentFilePath : pathNamesFromRootDir) {
-                System.out.println(currentFilePath); // PROVERKA POTOM UBRAT!!!!!!!!!!!!!!!!!!!!!
                 pathsTree.add(currentFilePath);
             }
             DefaultTreeModel model = new DefaultTreeModel(pathsTree.getPathRoot());
