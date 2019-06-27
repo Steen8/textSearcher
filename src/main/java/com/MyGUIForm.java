@@ -58,34 +58,36 @@ public class MyGUIForm extends JFrame{
 
 
         searchButton.addActionListener(e -> {
-            filesTree.setModel(null);
-            Searcher searcher = Searcher.getInstance();
-            if(filesWithGivenFormat != null) {
-                filesWithGivenFormat.clear();
+            if (!dirNameField.getText().equals("")) {
+                filesTree.setModel(null);
+                Searcher searcher = Searcher.getInstance();
+                if (filesWithGivenFormat != null) {
+                    filesWithGivenFormat.clear();
+                }
+                filesWithGivenFormat = new ArrayList<>();
+
+                //creating worker to make the awaiting window until job is done
+                final JDialog loading = new JDialog();
+                SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() {
+                        Searcher.searchFilesWithGivenFormat(dirNameStr, formatTextField.getText(), filesWithGivenFormat);
+
+                        filesWithGivenText = searcher.searchFilesWithGivenText(filesWithGivenFormat, textToSearchField.getText());
+
+                        PathsTree pathsTree = new PathsTree(dirNameStr);
+                        pathsTree.showTree(filesTree, filesWithGivenText, dirNameStr);
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                        loading.dispose();
+                    }
+                };
+                AwaitingWindowWorker.executeWorker(loading, filesTree, worker);
+                worker.execute();
             }
-            filesWithGivenFormat = new ArrayList<>();
-
-            //creating worker to make the awaiting window until job is done
-            final JDialog loading = new JDialog();
-            SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() {
-                    Searcher.searchFilesWithGivenFormat(dirNameStr, formatTextField.getText(), filesWithGivenFormat);
-
-                    filesWithGivenText = searcher.searchFilesWithGivenText(filesWithGivenFormat, textToSearchField.getText());
-
-                    PathsTree pathsTree = new PathsTree(dirNameStr);
-                    pathsTree.showTree(filesTree, filesWithGivenText, dirNameStr);
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    loading.dispose();
-                }
-            };
-            AwaitingWindowWorker.executeWorker(loading, filesTree, worker);
-            worker.execute();
 
 
         });
