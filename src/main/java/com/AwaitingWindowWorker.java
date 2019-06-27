@@ -19,6 +19,8 @@ public class AwaitingWindowWorker {
         JPanel p1 = new JPanel(new BorderLayout());
         JLabel awaiting = new JLabel("Please wait...");
         awaiting.setBackground(Color.DARK_GRAY);
+        awaiting.setFont(new Font("Calibri", Font.PLAIN, 20));
+        p1.setBorder(BorderFactory.createEtchedBorder());
         p1.add(awaiting, BorderLayout.CENTER);
         loading.setUndecorated(true);
         loading.getContentPane().add(p1);
