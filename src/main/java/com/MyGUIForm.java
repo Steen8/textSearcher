@@ -99,7 +99,7 @@ public class MyGUIForm extends JFrame{
                     TreePath selectionPath = filesTree.getSelectionPath();
                     if(selectionPath != null) {
                         String selectedName = selectionPath.getLastPathComponent().toString();
-                        int indexOfFormat = selectedName.lastIndexOf("txt");
+                        int indexOfFormat = selectedName.lastIndexOf(formatTextField.getText());
 
                         //checks that selected path is not the folder that may contain "given format of file"
                         if(indexOfFormat > 0 && selectedName.substring(indexOfFormat).equals(formatTextField.getText())) {
@@ -145,7 +145,7 @@ public class MyGUIForm extends JFrame{
                                 };
                                 AwaitingWindowWorker.executeWorker(loading, tabbedPanel, worker);
                                 worker.execute();
-                                tabbedPanel.setTitleAt(0, dirNameStr);
+                                tabbedPanel.setTitleAt(0, currentFilePath);
 
                                 System.gc();
                             } catch (Exception e1) {
