@@ -26,14 +26,22 @@ public class MyGUIForm extends JFrame{
     private JButton searchButton;
     private JTree filesTree;
     private JList listOfFileContent;
+    private JButton previousButton;
+    private JButton nextButton;
+    private JSeparator separator;
+    private JScrollPane Tab1;
 
     private String dirNameStr;
     private List<File> filesWithGivenFormat;
     private List<File> filesWithGivenText;
 
+    private int currentIndexOfFoundText = 0;
+    private List<Integer> indexesOfFoundText;
+
     public MyGUIForm() throws HeadlessException {
         filesTree.setModel(null);
         dirNameField.setEditable(false);
+        indexesOfFoundText = new ArrayList<>();
 
         /* creating FileChooser window to choose
         *  what directory to search file in */
@@ -76,7 +84,7 @@ public class MyGUIForm extends JFrame{
                     loading.dispose();
                 }
             };
-            AwaitingWindowWorker.executeWorker(loading, app, worker);
+            AwaitingWindowWorker.executeWorker(loading, filesTree, worker);
             worker.execute();
 
 
@@ -89,14 +97,18 @@ public class MyGUIForm extends JFrame{
                     TreePath selectionPath = filesTree.getSelectionPath();
                     if(selectionPath != null) {
                         String selectedName = selectionPath.getLastPathComponent().toString();
-                        System.out.println(selectedName);
                         int indexOfFormat = selectedName.lastIndexOf("txt");
-                        if(indexOfFormat > 0 && selectedName.substring(indexOfFormat).equals(formatTextField.getText())) { //checks that selected path is not the folder that may contain "given format of file"
+
+                        //checks that selected path is not the folder that may contain "given format of file"
+                        if(indexOfFormat > 0 && selectedName.substring(indexOfFormat).equals(formatTextField.getText())) {
                             String currentFilePath = dirNameStr;
-                            for(int i = 1; i < selectionPath.getPathCount(); ++i) { //starts with "i = 1" because rootDirPath already contains rootDirName (rootDirName index is 0 in selectionPath)
+
+                            //starts with "i = 1" because rootDirPath already contains rootDirName (rootDirName index is 0 in selectionPath)
+                            for(int i = 1; i < selectionPath.getPathCount(); ++i) {
                                 currentFilePath = currentFilePath.concat("\\").concat(selectionPath.getPathComponent(i).toString());
                             }
-                            System.out.println(currentFilePath);
+                            indexesOfFoundText.clear();
+                            currentIndexOfFoundText = 0;
                             File f = new File(currentFilePath);
                             try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(f)))) {
                                 Vector<String> lines = new Vector<>();
@@ -105,12 +117,22 @@ public class MyGUIForm extends JFrame{
                                 final JDialog loading = new JDialog();
                                 SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                                     @Override
-                                    protected Void doInBackground() throws InterruptedException, IOException {
+                                    protected Void doInBackground() throws IOException {
                                         String currentLine;
+                                        int i = 0;
                                         while ((currentLine = input.readLine()) != null) {
+                                            if(currentLine.contains("123")) {
+                                                indexesOfFoundText.add(i);
+                                            }
+                                            i++;
                                             lines.add(currentLine);
                                         }
                                         listOfFileContent.setListData(lines);
+                                        if(indexesOfFoundText.size() != 0) {
+                                            listOfFileContent.setSelectedValue
+                                                    (listOfFileContent.getModel().getElementAt(indexesOfFoundText.get(currentIndexOfFoundText)), true
+                                                    );
+                                        }
                                         return null;
                                     }
 
@@ -121,6 +143,7 @@ public class MyGUIForm extends JFrame{
                                 };
                                 AwaitingWindowWorker.executeWorker(loading, tabbedPanel, worker);
                                 worker.execute();
+                                tabbedPanel.setTitleAt(0, dirNameStr);
 
                                 System.gc();
                             } catch (Exception e1) {
@@ -129,6 +152,20 @@ public class MyGUIForm extends JFrame{
                         }
                     }
                 }
+            }
+        });
+
+        previousButton.addActionListener(e -> {
+            if(indexesOfFoundText.size() > 0 && currentIndexOfFoundText != 0) {
+                listOfFileContent.setSelectedIndex(indexesOfFoundText.get(--currentIndexOfFoundText));
+                listOfFileContent.ensureIndexIsVisible(indexesOfFoundText.get(currentIndexOfFoundText));
+            }
+        });
+
+        nextButton.addActionListener(e -> {
+            if(indexesOfFoundText.size() > 0 && currentIndexOfFoundText < indexesOfFoundText.size() - 1) {
+                listOfFileContent.setSelectedIndex(indexesOfFoundText.get(++currentIndexOfFoundText));
+                listOfFileContent.ensureIndexIsVisible(indexesOfFoundText.get(currentIndexOfFoundText));
             }
         });
 
@@ -142,7 +179,5 @@ public class MyGUIForm extends JFrame{
         frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
-
-
     }
 }
