@@ -5,10 +5,7 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -59,12 +56,30 @@ public class MyGUIForm extends JFrame{
                 filesWithGivenFormat.clear();
             }
             filesWithGivenFormat = new ArrayList<>();
-            Searcher.searchFilesWithGivenFormat(dirNameStr, formatTextField.getText(), filesWithGivenFormat);
 
-            filesWithGivenText = searcher.searchFilesWithGivenText(filesWithGivenFormat, textToSearchField.getText());
+            //creating worker to make the awaiting window until job is done
+            final JDialog loading = new JDialog();
+            SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() {
+                    Searcher.searchFilesWithGivenFormat(dirNameStr, formatTextField.getText(), filesWithGivenFormat);
 
-            PathsTree pathsTree = new PathsTree(dirNameStr);
-            pathsTree.showTree(filesTree, filesWithGivenText, dirNameStr);
+                    filesWithGivenText = searcher.searchFilesWithGivenText(filesWithGivenFormat, textToSearchField.getText());
+
+                    PathsTree pathsTree = new PathsTree(dirNameStr);
+                    pathsTree.showTree(filesTree, filesWithGivenText, dirNameStr);
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    loading.dispose();
+                }
+            };
+            AwaitingWindowWorker.executeWorker(loading, app, worker);
+            worker.execute();
+
+
         });
 
         filesTree.addMouseListener(new MouseAdapter() {
@@ -85,13 +100,28 @@ public class MyGUIForm extends JFrame{
                             File f = new File(currentFilePath);
                             try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(f)))) {
                                 Vector<String> lines = new Vector<>();
-                                String currentLine;
-                                //tabbedPanel.setTitleAt(0, currentFilePath);
-                                //listOfFileContent.setListData(new Object[] {});
-                                while((currentLine = input.readLine()) != null) {
-                                    lines.add(currentLine);
-                                }
-                                listOfFileContent.setListData(lines);
+
+                                //creating worker to make the awaiting window until job is done
+                                final JDialog loading = new JDialog();
+                                SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+                                    @Override
+                                    protected Void doInBackground() throws InterruptedException, IOException {
+                                        String currentLine;
+                                        while ((currentLine = input.readLine()) != null) {
+                                            lines.add(currentLine);
+                                        }
+                                        listOfFileContent.setListData(lines);
+                                        return null;
+                                    }
+
+                                    @Override
+                                    protected void done() {
+                                        loading.dispose();
+                                    }
+                                };
+                                AwaitingWindowWorker.executeWorker(loading, tabbedPanel, worker);
+                                worker.execute();
+
                                 System.gc();
                             } catch (Exception e1) {
                                 e1.printStackTrace();

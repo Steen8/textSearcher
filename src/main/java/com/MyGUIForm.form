@@ -126,8 +126,8 @@
             </constraints>
             <properties>
               <alignmentX value="0.5"/>
-              <label value="choose dir"/>
-              <text value="choose dir"/>
+              <label value="Choose dir"/>
+              <text value="Choose dir"/>
             </properties>
           </component>
           <component id="11044" class="javax.swing.JLabel" binding="directory">
