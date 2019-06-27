@@ -1,10 +1,17 @@
 package com;
 
 import javax.swing.*;
+import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class MyGUIForm extends JFrame{
     private JPanel app;
@@ -14,13 +21,14 @@ public class MyGUIForm extends JFrame{
     private JTextField textToSearchField;
     private JLabel fileType;
     private JTextField formatTextField;
-    private JTabbedPane tabbedPane1;
+    private JTabbedPane tabbedPanel;
     private JButton directoryButton;
     private JLabel directory;
     private JLabel dirNameFieldLabel;
     private JTextField dirNameField;
     private JButton searchButton;
     private JTree filesTree;
+    private JList listOfFileContent;
 
     private String dirNameStr;
     private List<File> filesWithGivenFormat;
@@ -28,6 +36,7 @@ public class MyGUIForm extends JFrame{
 
     public MyGUIForm() throws HeadlessException {
         filesTree.setModel(null);
+        dirNameField.setEditable(false);
 
         /* creating FileChooser window to choose
         *  what directory to search file in */
@@ -56,6 +65,41 @@ public class MyGUIForm extends JFrame{
 
             PathsTree pathsTree = new PathsTree(dirNameStr);
             pathsTree.showTree(filesTree, filesWithGivenText, dirNameStr);
+        });
+
+        filesTree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2){
+                    TreePath selectionPath = filesTree.getSelectionPath();
+                    if(selectionPath != null) {
+                        String selectedName = selectionPath.getLastPathComponent().toString();
+                        System.out.println(selectedName);
+                        int indexOfFormat = selectedName.lastIndexOf("txt");
+                        if(indexOfFormat > 0 && selectedName.substring(indexOfFormat).equals(formatTextField.getText())) { //checks that selected path is not the folder that may contain "given format of file"
+                            String currentFilePath = dirNameStr;
+                            for(int i = 1; i < selectionPath.getPathCount(); ++i) { //starts with "i = 1" because rootDirPath already contains rootDirName (rootDirName index is 0 in selectionPath)
+                                currentFilePath = currentFilePath.concat("\\").concat(selectionPath.getPathComponent(i).toString());
+                            }
+                            System.out.println(currentFilePath);
+                            File f = new File(currentFilePath);
+                            try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(f)))) {
+                                Vector<String> lines = new Vector<>();
+                                String currentLine;
+                                //tabbedPanel.setTitleAt(0, currentFilePath);
+                                //listOfFileContent.setListData(new Object[] {});
+                                while((currentLine = input.readLine()) != null) {
+                                    lines.add(currentLine);
+                                }
+                                listOfFileContent.setListData(lines);
+                                System.gc();
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
         });
 
 
