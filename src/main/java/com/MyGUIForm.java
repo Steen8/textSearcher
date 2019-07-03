@@ -111,6 +111,7 @@ public class MyGUIForm extends JFrame{
                             }
                             indexesOfFoundText.clear();
                             currentIndexOfFoundText = 0;
+                            String textToSearch = textToSearchField.getText();
                             File f = new File(currentFilePath);
                             try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(f)))) {
                                 Vector<String> lines = new Vector<>();
@@ -123,7 +124,7 @@ public class MyGUIForm extends JFrame{
                                         String currentLine;
                                         int i = 0;
                                         while ((currentLine = input.readLine()) != null) {
-                                            if(currentLine.contains("123")) {
+                                            if(currentLine.contains(textToSearch)) {
                                                 indexesOfFoundText.add(i);
                                             }
                                             i++;
